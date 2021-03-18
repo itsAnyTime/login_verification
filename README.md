@@ -1,7 +1,7 @@
 # login with verification
 
-checkt, ob Eingaben korrekt sind (Name, Email, Password)
-
+- checkt, ob Eingaben korrekt sind (Name, Email, Password)
+- localhost 3000
 
 Modules:
     npm init -y
