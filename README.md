@@ -159,7 +159,7 @@ end of login.ejs should look like this:
 19.3.21
 https://www.npmjs.com/package/bcrypt
 
-what is "salt"
+what is "salt" -> "Salt hashing is a technique in which we take the user entered password and a random string of characters called as salt, hash the combined string with a sutaible hashing algorithm and store the result in the database"
 
 npm i brcypt
 
@@ -342,3 +342,93 @@ or
 
 if we try to signup a new user with same email
 (on login page: http://localhost:3000/login)
+
+--
+
+https://getbootstrap.com/docs/4.0/components/modal/
+
+
+integrate something like this to login.ejs: 
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            ...
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+
+for our case: 
+
+ <!-- modal start -->
+    <div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalLabel">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" id="modalContent">
+              ...
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- modal end -->
+
+for emails: 
+
+integrate emailSender.js from old Projects and modify it
+
+add const emailSender = require("./emailSender");
+
+
+    const nodemailer = require('nodemailer');
+    // const ejs = require('ejs');
+    const transporter = nodemailer.createTransport({
+        host: "mail.coding-school.org",
+        port: 465,
+        auth: {
+        user: "fbw8@coding-school.org",
+        pass: "!234qweR"
+        },
+        tls: {
+        // do not fail on invalid certs
+        rejectUnauthorized: false
+        }
+    });
+    function sendEmail(email, message, callback) {
+            const mailOption = {
+                from: "fbw8@coding-school.org",
+                to: email,
+                subject: "Verify your email, please.",
+                text: message
+            };
+            transporter.sendMail(mailOption, (error, info) => {
+                if(error){
+                    console.log(error);
+                    callback(false);
+                } else {
+                    console.log(info);
+                    callback(true)
+                }
+            })
+    }

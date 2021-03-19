@@ -364,6 +364,27 @@
     </footer>
     <!--/Footer-->
 
+    <!-- modal start -->
+    <div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header" id="modalHeader">
+              <h5 class="modal-title" id="modalLabel">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" id="modalContent">
+              ...
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="modalCloseBtn" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- modal end -->
+
 
 
     <script src="/js/jquery.js"></script>
@@ -415,12 +436,15 @@
                             switch (data) {
                                 case 1:
                                     console.log("success");
+                                    showModal('success', 'You have been registered successfully. </br> Please check your email to verify it.');
                                     break;
                                 case 2:
                                     console.log("unknown error");
+                                    showModal('unknown error', 'Unknown error happened during registration. </br> Please contact Admin.', 'danger');
                                     break;
                                 case 3:
                                     console.log("email already exist");
+                                    showModal('email exist', 'The email that you used is already registered. </br> Please check your login data.', 'warning');
                                     break;
 
                                 default:
@@ -431,6 +455,18 @@
                 })
             }
         })
+
+        function showModal(title, content, style) {
+            document.getElementById('modalLabel').innerHTML = title;
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('modalHeader').className = `modal-header label-${style}`;
+            document.getElementById('modalCloseBtn').className = `btn btn-${style}`;
+            
+            $('#resultModal').modal('show');
+        }
+        // modalCloseBtn
+        // modalHeader
+
     </script>
 </body>
 

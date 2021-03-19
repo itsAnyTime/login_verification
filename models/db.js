@@ -1,6 +1,7 @@
 // MongoDB with Mongoose
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const emailSender = require("./emailSender");
 const emailToken = require("generate-sms-verification-code");
 const connectionString = 'mongodb+srv://bookstore_user:mybhGSgSscz9g2a@cluster0.vscne.mongodb.net/bookstore_for_loginverification?retryWrites=true&w=majority'
 
@@ -88,7 +89,18 @@ function addUser(name, email, password) {
                         verified: false
                     });
                     newUser.save().then(() => {
-                        resolve();
+                        let message = `
+                        Welcome to our website. 
+                        Please verify your email by clicking this link:
+                        http://localhost:3000/verify?code=${verificationCode}
+                        `;
+                        emailSender.sendEmail(email, message, (ok) => {
+                            if(ok) {
+                                resolve()
+                            } else {
+                                reject();
+                            }
+                        })
                     }).catch(error => {
                         if (error.code === 11000) {
                             reject(3) // user already exist
