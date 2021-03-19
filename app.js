@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
+const db = require("./models/db");
 
 // middleware path to public
 // make anything inside public folder accessable without creating routes
@@ -23,12 +24,28 @@ app.get('/login', (req, res) => {
     res.render('login')
 });
 
+// responses map
+// 1. registration is down
+// 2. unknown error
+// 3. user email already exist 
+
 // create a route to get register data
 app.post('/signup', (req, res) => {
     // serverside too
     console.log(req.body);
-    res.json(1);
-});
+
+    const { name, email, password } = req.body;
+    db.addUser(name, email, password).then(() => {
+        res.json(1);  // all is good
+    }).catch(error => {
+        console.log(error);
+        if(error === 3) {
+            res.json(3);  // error
+        } else {
+            res.json(2);
+        }
+    })
+})
     
 app.listen(port, () => console.log('Listening on port: ' + port));
 

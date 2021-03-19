@@ -377,7 +377,7 @@
     <!-- german language -->
     <!-- <script src="/parsley/i18n/de.js"></script>  -->
     <!-- english language -->
-    <script src="/parsley/i18n/en.js"></script> 
+    <script src="/parsley/i18n/en.js"></script>
 
     <script> // after break stuff
         // get html dom elements
@@ -389,32 +389,47 @@
         // add click event listener 
         regBtn.addEventListener('click', () => {
             // send user data to server side using fetch
-            let valid = $('#signupDiv').parsley().validate({force: true});
+            let valid = $('#signupDiv').parsley().validate({ force: true });
 
-            if(valid) {
-            const sendData = {
-                name: regName.value,
-                email: regEmail.value,
-                password: regPassword.value
-            }
-
-            fetch('/signup', {
-                method: 'POST',
-                headers: {
-                    'content-type' : 'application/json'
-                },
-                body: JSON.stringify(sendData)
-            }).then(response => {
-                if(response.status === 200) {
-                    response.json().then(data => {
-                        if(data === 1) {
-                            console.log("success");
-                        } else
-                        console.log('failed');
-                    })
+            if (valid) {
+                const sendData = {
+                    name: regName.value,
+                    email: regEmail.value,
+                    password: regPassword.value
                 }
-            })
-        }
+
+                fetch('/signup', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(sendData)
+                }).then(response => {
+                    if (response.status === 200) {
+                        response.json().then(data => {                           
+                            //     if(data === 1) {
+                            //         console.log("success");
+                            //     } else
+                            //     console.log('failed');
+                            // changed to switch case:
+                            switch (data) {
+                                case 1:
+                                    console.log("success");
+                                    break;
+                                case 2:
+                                    console.log("unknown error");
+                                    break;
+                                case 3:
+                                    console.log("email already exist");
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                        })
+                    }
+                })
+            }
         })
     </script>
 </body>
